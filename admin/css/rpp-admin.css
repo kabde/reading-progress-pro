@@ -1,0 +1,30 @@
+/**
+ * Reading Time & Progress Pro — Admin CSS
+ * Minimal styles for stats dashboard cards.
+ */
+
+/* Stats card hover */
+.rpp-stat-card {
+    transition: transform 200ms ease, box-shadow 200ms ease;
+}
+.rpp-stat-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+/* Color input styling */
+input[type="color"] {
+    width: 50px;
+    height: 34px;
+    padding: 2px;
+    border: 1px solid #c3c4c7;
+    border-radius: 4px;
+    cursor: pointer;
+    vertical-align: middle;
+}
+
+/* Range input styling */
+input[type="range"] {
+    vertical-align: middle;
+    margin-right: 8px;
+}
