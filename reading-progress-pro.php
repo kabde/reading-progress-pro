@@ -2,7 +2,7 @@
 /**
  * Plugin Name: Reading Time & Progress Pro
  * Description: Reading time estimation, progress bar, scroll tracking, and social proof for your articles.
- * Version:     1.0.0
+ * Version:     1.1.0
  * Author:      Abderrahim KHALID
  * Text Domain: reading-progress-pro
  * Network:     true
@@ -15,7 +15,7 @@ if ( ! defined( 'ABSPATH' ) ) {
     exit;
 }
 
-define( 'RPP_VERSION', '1.0.0' );
+define( 'RPP_VERSION', '1.1.0' );
 define( 'RPP_FILE', __FILE__ );
 define( 'RPP_BASENAME', plugin_basename( __FILE__ ) );
 define( 'RPP_PATH', plugin_dir_path( __FILE__ ) );
