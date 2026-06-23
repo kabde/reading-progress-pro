@@ -25,7 +25,7 @@ class RPP_Settings {
             'manage_options',
             'rpp-settings',
             [ $this, 'render' ],
-            'dashicons-clock',
+            'dashicons-performance',
             24
         );
     }
@@ -49,9 +49,9 @@ class RPP_Settings {
         $input = is_array( $input ) ? $input : [];
         $clean = [];
 
-        // Général
+        // General
         $clean['words_per_minute'] = absint( $input['words_per_minute'] ?? 250 ) ?: 250;
-        $clean['time_format']      = sanitize_text_field( $input['time_format'] ?? '{time} min de lecture' );
+        $clean['time_format']      = sanitize_text_field( $input['time_format'] ?? '{time} min read' );
         $clean['show_reading_time'] = empty( $input['show_reading_time'] ) ? '0' : '1';
         $clean['time_position']    = in_array( $input['time_position'] ?? '', [ 'before_content', 'after_title', 'after_content' ], true ) ? $input['time_position'] : 'before_content';
         $clean['show_icon']        = empty( $input['show_icon'] ) ? '0' : '1';
@@ -64,14 +64,14 @@ class RPP_Settings {
 
         $clean['content_selector'] = sanitize_text_field( $input['content_selector'] ?? '.entry-content, .post-content, article' );
 
-        // Barre de progression
+        // Progress bar
         $clean['bar_enabled']  = empty( $input['bar_enabled'] ) ? '0' : '1';
         $clean['bar_color']    = sanitize_hex_color( $input['bar_color'] ?? '#ffc45e' ) ?: '#ffc45e';
         $clean['bar_height']   = max( 1, min( 10, absint( $input['bar_height'] ?? 3 ) ) );
         $clean['bar_position'] = in_array( $input['bar_position'] ?? '', [ 'top', 'bottom' ], true ) ? $input['bar_position'] : 'top';
         $clean['bar_track']    = empty( $input['bar_track'] ) ? '0' : '1';
 
-        // Statistiques
+        // Statistics
         $clean['tracking_enabled'] = empty( $input['tracking_enabled'] ) ? '0' : '1';
         $clean['exclude_admins']   = empty( $input['exclude_admins'] ) ? '0' : '1';
         $clean['retention_days']   = in_array( $input['retention_days'] ?? '', [ '30', '60', '90', '180', '365' ], true ) ? $input['retention_days'] : '90';
@@ -108,7 +108,7 @@ class RPP_Settings {
 
     public function render() {
         if ( ! current_user_can( 'manage_options' ) ) {
-            wp_die( 'You do not have sufficient permissions.' );
+            wp_die( esc_html__( 'You do not have sufficient permissions.', 'reading-progress-pro' ) );
         }
 
         $licensed      = rpp_is_licensed();
@@ -117,11 +117,11 @@ class RPP_Settings {
         $defaults      = rpp_settings_defaults();
         $s             = wp_parse_args( $settings, $defaults );
         $tabs = [
-            'license'    => [ 'label' => 'Licence',             'icon' => 'dashicons-lock' ],
-            'general'    => [ 'label' => 'Général',            'icon' => 'dashicons-admin-settings' ],
-            'progress'   => [ 'label' => 'Barre de progression', 'icon' => 'dashicons-minus' ],
-            'stats'      => [ 'label' => 'Statistiques',        'icon' => 'dashicons-chart-bar' ],
-            'docs'       => [ 'label' => 'Documentation',       'icon' => 'dashicons-book' ],
+            'license'    => [ 'label' => __( 'License', 'reading-progress-pro' ),      'icon' => 'dashicons-lock' ],
+            'general'    => [ 'label' => __( 'General', 'reading-progress-pro' ),      'icon' => 'dashicons-admin-settings' ],
+            'progress'   => [ 'label' => __( 'Progress Bar', 'reading-progress-pro' ), 'icon' => 'dashicons-minus' ],
+            'stats'      => [ 'label' => __( 'Statistics', 'reading-progress-pro' ),   'icon' => 'dashicons-chart-bar' ],
+            'docs'       => [ 'label' => __( 'Documentation', 'reading-progress-pro' ), 'icon' => 'dashicons-book' ],
         ];
 
         // Only show non-license tabs when licensed
@@ -257,25 +257,25 @@ class RPP_Settings {
                     <!-- License Tab -->
                     <div id="rpp-tab-license" class="rpp-tab-content">
                         <div class="rpp-admin-section">
-                            <h2>Licence</h2>
+                            <h2><?php esc_html_e( 'License', 'reading-progress-pro' ); ?></h2>
                             <div class="rpp-license-card">
                                 <?php if ( $licensed ) : ?>
                                     <div style="text-align:center;margin-bottom:20px;">
-                                        <span class="rpp-license-active">&#10003; Licence Active</span>
+                                        <span class="rpp-license-active">&#10003; <?php esc_html_e( 'License Active', 'reading-progress-pro' ); ?></span>
                                     </div>
                                     <table class="form-table" style="margin:0;">
                                         <tr>
-                                            <th>Cl&eacute; de licence</th>
+                                            <th><?php esc_html_e( 'License key', 'reading-progress-pro' ); ?></th>
                                             <td><?php
 $masked = substr($license_key, 0, 4) . '-****-****-' . substr($license_key, -4);
 ?><code style="font-size:14px;"><?php echo esc_html($masked); ?></code></td>
                                         </tr>
                                         <tr>
-                                            <th>Domaine</th>
+                                            <th><?php esc_html_e( 'Domain', 'reading-progress-pro' ); ?></th>
                                             <td><?php echo esc_html( home_url() ); ?></td>
                                         </tr>
                                         <tr>
-                                            <th>Expiration</th>
+                                            <th><?php esc_html_e( 'Expiration', 'reading-progress-pro' ); ?></th>
                                             <td>
                                                 <?php
                                                 $expires = get_option( 'rpp_license_expires_at', '' );
@@ -283,30 +283,33 @@ $masked = substr($license_key, 0, 4) . '-****-****-' . substr($license_key, -4);
                                                     $days = (int) ceil( ( strtotime( $expires ) - time() ) / 86400 );
                                                     $date_formatted = wp_date( 'd F Y', strtotime( $expires ) );
                                                     if ( $days <= 0 ) {
-                                                        echo '<span style="color:#dc2626;font-weight:600;">Expir&eacute;e le ' . esc_html( $date_formatted ) . '</span>';
+                                                        /* translators: %s: expiration date */
+                                                        echo '<span style="color:#dc2626;font-weight:600;">' . sprintf( esc_html__( 'Expired on %s', 'reading-progress-pro' ), esc_html( $date_formatted ) ) . '</span>';
                                                     } elseif ( $days <= 30 ) {
-                                                        echo '<span style="color:#d97706;font-weight:600;">' . esc_html( $date_formatted ) . ' (' . $days . ' jour' . ($days > 1 ? 's' : '') . ' restants)</span>';
+                                                        /* translators: 1: expiration date, 2: number of days remaining */
+                                                        echo '<span style="color:#d97706;font-weight:600;">' . sprintf( esc_html( _n( '%1$s (%2$d day remaining)', '%1$s (%2$d days remaining)', $days, 'reading-progress-pro' ) ), esc_html( $date_formatted ), $days ) . '</span>';
                                                     } else {
-                                                        echo '<span style="color:#16a34a;">' . esc_html( $date_formatted ) . ' (' . $days . ' jours restants)</span>';
+                                                        /* translators: 1: expiration date, 2: number of days remaining */
+                                                        echo '<span style="color:#16a34a;">' . sprintf( esc_html__( '%1$s (%2$d days remaining)', 'reading-progress-pro' ), esc_html( $date_formatted ), $days ) . '</span>';
                                                     }
                                                 } else {
-                                                    echo '<span style="color:#16a34a;">Lifetime (pas d\'expiration)</span>';
+                                                    echo '<span style="color:#16a34a;">' . esc_html__( 'Lifetime (no expiration)', 'reading-progress-pro' ) . '</span>';
                                                 }
                                                 ?>
                                             </td>
                                         </tr>
                                     </table>
                                     <p style="margin-top:20px;">
-                                        <button type="button" id="rpp-deactivate-btn" class="button button-secondary" style="color:#d63638;">D&eacute;sactiver la licence</button>
+                                        <button type="button" id="rpp-deactivate-btn" class="button button-secondary" style="color:#d63638;"><?php esc_html_e( 'Deactivate license', 'reading-progress-pro' ); ?></button>
                                     </p>
                                 <?php else : ?>
-                                    <h2 style="margin-top:0;">Activez votre licence</h2>
-                                    <p>Entrez votre cl&eacute; de licence pour activer Reading Time &amp; Progress Pro.</p>
+                                    <h2 style="margin-top:0;"><?php esc_html_e( 'Activate your license', 'reading-progress-pro' ); ?></h2>
+                                    <p><?php esc_html_e( 'Enter your license key to activate Reading Time & Progress Pro.', 'reading-progress-pro' ); ?></p>
                                     <p>
                                         <input type="text" id="rpp-license-key" placeholder="RPP-XXXX-XXXX-XXXX" style="width:100%;font-size:16px;padding:8px 12px;font-family:monospace;text-transform:uppercase;" maxlength="19">
                                     </p>
                                     <p>
-                                        <button type="button" id="rpp-activate-btn" class="button button-primary button-hero" style="width:100%;">Activer la licence</button>
+                                        <button type="button" id="rpp-activate-btn" class="button button-primary button-hero" style="width:100%;"><?php esc_html_e( 'Activate license', 'reading-progress-pro' ); ?></button>
                                     </p>
                                     <div id="rpp-license-message" style="margin-top:15px;display:none;"></div>
                                 <?php endif; ?>
@@ -324,61 +327,64 @@ $masked = substr($license_key, 0, 4) . '-****-****-' . substr($license_key, -4);
                         <!-- General Tab -->
                         <div id="rpp-tab-general" class="rpp-tab-content">
                             <div class="rpp-admin-section">
-                                <h2>Temps de lecture</h2>
+                                <h2><?php esc_html_e( 'Reading Time', 'reading-progress-pro' ); ?></h2>
                                 <table class="form-table">
                                     <tr>
-                                        <th scope="row">Mots par minute</th>
+                                        <th scope="row"><?php esc_html_e( 'Words per minute', 'reading-progress-pro' ); ?></th>
                                         <td>
                                             <input type="number" name="rpp_settings[words_per_minute]" value="<?php echo esc_attr( $s['words_per_minute'] ); ?>" class="small-text" min="100" max="1000" step="10">
-                                            <p class="description">Vitesse de lecture moyenne. 250 est la norme pour le fran&ccedil;ais.</p>
+                                            <p class="description"><?php esc_html_e( 'Average reading speed. 250 is the standard for most languages.', 'reading-progress-pro' ); ?></p>
                                         </td>
                                     </tr>
                                     <tr>
-                                        <th scope="row">Format d'affichage</th>
+                                        <th scope="row"><?php esc_html_e( 'Display format', 'reading-progress-pro' ); ?></th>
                                         <td>
                                             <input type="text" name="rpp_settings[time_format]" value="<?php echo esc_attr( $s['time_format'] ); ?>" class="regular-text">
-                                            <p class="description">Utilisez <code>{time}</code> pour le nombre de minutes. Ex: <code>{time} min de lecture</code>, <code>{time} min read</code></p>
+                                            <p class="description"><?php
+                                                /* translators: %s: {time} placeholder */
+                                                printf( esc_html__( 'Use %s for the number of minutes. E.g.: %s, %s', 'reading-progress-pro' ), '<code>{time}</code>', '<code>{time} min read</code>', '<code>{time} min de lecture</code>' );
+                                            ?></p>
                                         </td>
                                     </tr>
                                     <tr>
-                                        <th scope="row">Afficher le temps de lecture</th>
+                                        <th scope="row"><?php esc_html_e( 'Show reading time', 'reading-progress-pro' ); ?></th>
                                         <td>
                                             <label>
                                                 <input type="checkbox" name="rpp_settings[show_reading_time]" value="1" <?php checked( $s['show_reading_time'], '1' ); ?>>
-                                                Afficher automatiquement le temps de lecture sur les articles
+                                                <?php esc_html_e( 'Automatically display reading time on posts', 'reading-progress-pro' ); ?>
                                             </label>
                                         </td>
                                     </tr>
                                     <tr>
-                                        <th scope="row">Position</th>
+                                        <th scope="row"><?php esc_html_e( 'Position', 'reading-progress-pro' ); ?></th>
                                         <td>
                                             <select name="rpp_settings[time_position]">
-                                                <option value="before_content" <?php selected( $s['time_position'], 'before_content' ); ?>>Avant le contenu</option>
-                                                <option value="after_title" <?php selected( $s['time_position'], 'after_title' ); ?>>Apr&egrave;s le titre</option>
-                                                <option value="after_content" <?php selected( $s['time_position'], 'after_content' ); ?>>Apr&egrave;s le contenu</option>
+                                                <option value="before_content" <?php selected( $s['time_position'], 'before_content' ); ?>><?php esc_html_e( 'Before content', 'reading-progress-pro' ); ?></option>
+                                                <option value="after_title" <?php selected( $s['time_position'], 'after_title' ); ?>><?php esc_html_e( 'After title', 'reading-progress-pro' ); ?></option>
+                                                <option value="after_content" <?php selected( $s['time_position'], 'after_content' ); ?>><?php esc_html_e( 'After content', 'reading-progress-pro' ); ?></option>
                                             </select>
                                         </td>
                                     </tr>
                                     <tr>
-                                        <th scope="row">Ic&ocirc;ne</th>
+                                        <th scope="row"><?php esc_html_e( 'Icon', 'reading-progress-pro' ); ?></th>
                                         <td>
                                             <label>
                                                 <input type="checkbox" name="rpp_settings[show_icon]" value="1" <?php checked( $s['show_icon'], '1' ); ?>>
-                                                Afficher l'ic&ocirc;ne horloge &#128337; avant le temps de lecture
+                                                <?php esc_html_e( 'Show clock icon &#128337; before reading time', 'reading-progress-pro' ); ?>
                                             </label>
                                         </td>
                                     </tr>
                                     <tr>
-                                        <th scope="row">Listes d'articles</th>
+                                        <th scope="row"><?php esc_html_e( 'Post listings', 'reading-progress-pro' ); ?></th>
                                         <td>
                                             <label>
                                                 <input type="checkbox" name="rpp_settings[show_in_listings]" value="1" <?php checked( $s['show_in_listings'], '1' ); ?>>
-                                                Afficher aussi dans les archives, cat&eacute;gories et recherche
+                                                <?php esc_html_e( 'Also display in archives, categories, and search results', 'reading-progress-pro' ); ?>
                                             </label>
                                         </td>
                                     </tr>
                                     <tr>
-                                        <th scope="row">Types de contenu</th>
+                                        <th scope="row"><?php esc_html_e( 'Content types', 'reading-progress-pro' ); ?></th>
                                         <td>
                                             <?php foreach ( $public_types as $type ) : ?>
                                                 <label style="display:block;margin-bottom:6px;">
@@ -389,66 +395,66 @@ $masked = substr($license_key, 0, 4) . '-****-****-' . substr($license_key, -4);
                                         </td>
                                     </tr>
                                     <tr>
-                                        <th scope="row">S&eacute;lecteur CSS du contenu</th>
+                                        <th scope="row"><?php esc_html_e( 'Content CSS selector', 'reading-progress-pro' ); ?></th>
                                         <td>
                                             <input type="text" name="rpp_settings[content_selector]" value="<?php echo esc_attr( $s['content_selector'] ); ?>" class="regular-text">
-                                            <p class="description">S&eacute;lecteur CSS utilis&eacute; pour d&eacute;tecter la zone de contenu (pour la barre de progression). Ex: <code>.entry-content, .post-content, article</code></p>
+                                            <p class="description"><?php esc_html_e( 'CSS selector used to detect the content area (for the progress bar). E.g.:', 'reading-progress-pro' ); ?> <code>.entry-content, .post-content, article</code></p>
                                         </td>
                                     </tr>
                                 </table>
                             </div>
                             <div class="submit">
-                                <?php submit_button( 'Enregistrer', 'primary', 'submit', false ); ?>
+                                <?php submit_button( __( 'Save', 'reading-progress-pro' ), 'primary', 'submit', false ); ?>
                             </div>
                         </div>
 
                         <!-- Progress Bar Tab -->
                         <div id="rpp-tab-progress" class="rpp-tab-content">
                             <div class="rpp-admin-section">
-                                <h2>Barre de progression</h2>
+                                <h2><?php esc_html_e( 'Progress Bar', 'reading-progress-pro' ); ?></h2>
                                 <table class="form-table">
                                     <tr>
-                                        <th scope="row">Activer la barre</th>
+                                        <th scope="row"><?php esc_html_e( 'Enable bar', 'reading-progress-pro' ); ?></th>
                                         <td>
                                             <label>
                                                 <input type="checkbox" id="rpp-bar-enabled" name="rpp_settings[bar_enabled]" value="1" <?php checked( $s['bar_enabled'], '1' ); ?>>
-                                                Afficher une barre de progression de lecture
+                                                <?php esc_html_e( 'Show a reading progress bar', 'reading-progress-pro' ); ?>
                                             </label>
                                         </td>
                                     </tr>
                                     <tr>
-                                        <th scope="row">Couleur</th>
+                                        <th scope="row"><?php esc_html_e( 'Color', 'reading-progress-pro' ); ?></th>
                                         <td>
                                             <input type="color" id="rpp-bar-color" name="rpp_settings[bar_color]" value="<?php echo esc_attr( $s['bar_color'] ); ?>">
                                             <code id="rpp-bar-color-hex"><?php echo esc_html( $s['bar_color'] ); ?></code>
                                         </td>
                                     </tr>
                                     <tr>
-                                        <th scope="row">&Eacute;paisseur</th>
+                                        <th scope="row"><?php esc_html_e( 'Height', 'reading-progress-pro' ); ?></th>
                                         <td>
                                             <input type="range" id="rpp-bar-height" name="rpp_settings[bar_height]" value="<?php echo esc_attr( $s['bar_height'] ); ?>" min="1" max="10" step="1">
                                             <span id="rpp-bar-height-val"><?php echo esc_html( $s['bar_height'] ); ?>px</span>
                                         </td>
                                     </tr>
                                     <tr>
-                                        <th scope="row">Position</th>
+                                        <th scope="row"><?php esc_html_e( 'Position', 'reading-progress-pro' ); ?></th>
                                         <td>
                                             <label style="display:inline-block;margin-right:20px;">
                                                 <input type="radio" id="rpp-bar-pos-top" name="rpp_settings[bar_position]" value="top" <?php checked( $s['bar_position'], 'top' ); ?>>
-                                                Haut de page
+                                                <?php esc_html_e( 'Top of page', 'reading-progress-pro' ); ?>
                                             </label>
                                             <label>
                                                 <input type="radio" id="rpp-bar-pos-bottom" name="rpp_settings[bar_position]" value="bottom" <?php checked( $s['bar_position'], 'bottom' ); ?>>
-                                                Bas de page
+                                                <?php esc_html_e( 'Bottom of page', 'reading-progress-pro' ); ?>
                                             </label>
                                         </td>
                                     </tr>
                                     <tr>
-                                        <th scope="row">Fond de piste</th>
+                                        <th scope="row"><?php esc_html_e( 'Track background', 'reading-progress-pro' ); ?></th>
                                         <td>
                                             <label>
                                                 <input type="checkbox" id="rpp-bar-track" name="rpp_settings[bar_track]" value="1" <?php checked( $s['bar_track'], '1' ); ?>>
-                                                Afficher un fond semi-transparent derri&egrave;re la barre
+                                                <?php esc_html_e( 'Show a semi-transparent background behind the bar', 'reading-progress-pro' ); ?>
                                             </label>
                                         </td>
                                     </tr>
@@ -457,12 +463,12 @@ $masked = substr($license_key, 0, 4) . '-****-****-' . substr($license_key, -4);
 
                             <!-- Live Preview -->
                             <div class="rpp-admin-section">
-                                <h2>Aper&ccedil;u</h2>
+                                <h2><?php esc_html_e( 'Preview', 'reading-progress-pro' ); ?></h2>
                                 <div class="rpp-bar-preview-container" id="rpp-preview">
                                     <div id="rpp-preview-track" style="position:absolute;left:0;width:100%;background:rgba(0,0,0,0.08);"></div>
                                     <div id="rpp-preview-bar" class="rpp-bar-preview-bar" style="background:<?php echo esc_attr( $s['bar_color'] ); ?>;height:<?php echo esc_attr( $s['bar_height'] ); ?>px;top:0;"></div>
                                     <div class="rpp-bar-preview-content">
-                                        <p><strong>Titre de l'article</strong></p>
+                                        <p><strong><?php esc_html_e( 'Article title', 'reading-progress-pro' ); ?></strong></p>
                                         <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
                                         <p>Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
                                         <p>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis.</p>
@@ -471,67 +477,71 @@ $masked = substr($license_key, 0, 4) . '-****-****-' . substr($license_key, -4);
                             </div>
 
                             <div class="submit">
-                                <?php submit_button( 'Enregistrer', 'primary', 'submit', false ); ?>
+                                <?php submit_button( __( 'Save', 'reading-progress-pro' ), 'primary', 'submit', false ); ?>
                             </div>
                         </div>
 
                         <!-- Stats Tab -->
                         <div id="rpp-tab-stats" class="rpp-tab-content">
                             <div class="rpp-admin-section">
-                                <h2>Param&egrave;tres de tracking</h2>
+                                <h2><?php esc_html_e( 'Tracking Settings', 'reading-progress-pro' ); ?></h2>
                                 <table class="form-table">
                                     <tr>
-                                        <th scope="row">Activer le tracking</th>
+                                        <th scope="row"><?php esc_html_e( 'Enable tracking', 'reading-progress-pro' ); ?></th>
                                         <td>
                                             <label>
                                                 <input type="checkbox" name="rpp_settings[tracking_enabled]" value="1" <?php checked( $s['tracking_enabled'], '1' ); ?>>
-                                                Enregistrer les donn&eacute;es de lecture (scroll, temps pass&eacute;)
+                                                <?php esc_html_e( 'Record reading data (scroll, time spent)', 'reading-progress-pro' ); ?>
                                             </label>
                                         </td>
                                     </tr>
                                     <tr>
-                                        <th scope="row">Exclure les admins</th>
+                                        <th scope="row"><?php esc_html_e( 'Exclude admins', 'reading-progress-pro' ); ?></th>
                                         <td>
                                             <label>
                                                 <input type="checkbox" name="rpp_settings[exclude_admins]" value="1" <?php checked( $s['exclude_admins'], '1' ); ?>>
-                                                Ne pas tracker les administrateurs
+                                                <?php esc_html_e( 'Do not track administrators', 'reading-progress-pro' ); ?>
                                             </label>
                                         </td>
                                     </tr>
                                     <tr>
-                                        <th scope="row">R&eacute;tention des donn&eacute;es</th>
+                                        <th scope="row"><?php esc_html_e( 'Data retention', 'reading-progress-pro' ); ?></th>
                                         <td>
                                             <select name="rpp_settings[retention_days]">
-                                                <option value="30" <?php selected( $s['retention_days'], '30' ); ?>>30 jours</option>
-                                                <option value="60" <?php selected( $s['retention_days'], '60' ); ?>>60 jours</option>
-                                                <option value="90" <?php selected( $s['retention_days'], '90' ); ?>>90 jours</option>
-                                                <option value="180" <?php selected( $s['retention_days'], '180' ); ?>>180 jours</option>
-                                                <option value="365" <?php selected( $s['retention_days'], '365' ); ?>>1 an</option>
+                                                <?php
+                                                /* translators: %d: number of days */
+                                                $day_label = __( '%d days', 'reading-progress-pro' );
+                                                ?>
+                                                <option value="30" <?php selected( $s['retention_days'], '30' ); ?>><?php printf( $day_label, 30 ); ?></option>
+                                                <option value="60" <?php selected( $s['retention_days'], '60' ); ?>><?php printf( $day_label, 60 ); ?></option>
+                                                <option value="90" <?php selected( $s['retention_days'], '90' ); ?>><?php printf( $day_label, 90 ); ?></option>
+                                                <option value="180" <?php selected( $s['retention_days'], '180' ); ?>><?php printf( $day_label, 180 ); ?></option>
+                                                <option value="365" <?php selected( $s['retention_days'], '365' ); ?>><?php esc_html_e( '1 year', 'reading-progress-pro' ); ?></option>
                                             </select>
-                                            <p class="description">Dur&eacute;e de conservation des donn&eacute;es de tracking. Les donn&eacute;es plus anciennes sont supprim&eacute;es automatiquement.</p>
+                                            <p class="description"><?php esc_html_e( 'How long tracking data is kept. Older data is automatically deleted.', 'reading-progress-pro' ); ?></p>
                                         </td>
                                     </tr>
                                     <tr>
-                                        <th scope="row">Social proof</th>
+                                        <th scope="row"><?php esc_html_e( 'Social proof', 'reading-progress-pro' ); ?></th>
                                         <td>
                                             <label>
                                                 <input type="checkbox" name="rpp_settings[social_proof]" value="1" <?php checked( $s['social_proof'], '1' ); ?>>
-                                                Afficher le nombre de lecteurs en cours
+                                                <?php esc_html_e( 'Show the number of current readers', 'reading-progress-pro' ); ?>
                                             </label>
                                         </td>
                                     </tr>
                                     <tr>
-                                        <th scope="row">Seuil minimum</th>
+                                        <th scope="row"><?php esc_html_e( 'Minimum threshold', 'reading-progress-pro' ); ?></th>
                                         <td>
                                             <input type="number" name="rpp_settings[social_threshold]" value="<?php echo esc_attr( $s['social_threshold'] ); ?>" class="small-text" min="1" max="100">
-                                            <p class="description">Nombre minimum de lecteurs actifs pour afficher le social proof.</p>
+                                            <p class="description"><?php esc_html_e( 'Minimum number of active readers to display the social proof.', 'reading-progress-pro' ); ?></p>
                                         </td>
                                     </tr>
                                     <tr>
-                                        <th scope="row">CSS personnalis&eacute;</th>
+                                        <th scope="row"><?php esc_html_e( 'Custom CSS', 'reading-progress-pro' ); ?></th>
                                         <td>
                                             <textarea id="rpp_custom_css" name="rpp_settings[custom_css]" rows="8" style="width:100%;font-family:monospace;"><?php echo esc_textarea( $s['custom_css'] ); ?></textarea>
-                                            <p class="description">CSS personnalis&eacute; appliqu&eacute; sur le front-end.</p>
+                                            <p class="description"><?php esc_html_e( 'Custom CSS applied on the front-end.', 'reading-progress-pro' ); ?></p>
                                         </td>
                                     </tr>
                                 </table>
@@ -541,7 +551,7 @@ $masked = substr($license_key, 0, 4) . '-****-****-' . substr($license_key, -4);
                             <?php $this->render_stats_dashboard(); ?>
 
                             <div class="submit">
-                                <?php submit_button( 'Enregistrer', 'primary', 'submit', false ); ?>
+                                <?php submit_button( __( 'Save', 'reading-progress-pro' ), 'primary', 'submit', false ); ?>
                             </div>
                         </div>
 
@@ -551,124 +561,124 @@ $masked = substr($license_key, 0, 4) . '-****-****-' . substr($license_key, -4);
                     <div id="rpp-tab-docs" class="rpp-tab-content">
 
                         <div class="rpp-admin-section">
-                            <h2>Premiers pas</h2>
+                            <h2><?php esc_html_e( 'Getting Started', 'reading-progress-pro' ); ?></h2>
                             <ol style="line-height:2;font-size:14px;color:#374151;">
-                                <li>Activez votre <strong>licence</strong> dans l'onglet Licence</li>
-                                <li>Configurez la <strong>vitesse de lecture</strong> et le format d'affichage dans G&eacute;n&eacute;ral</li>
-                                <li>Personnalisez la <strong>barre de progression</strong> (couleur, &eacute;paisseur, position)</li>
-                                <li>Activez le <strong>tracking</strong> pour suivre les statistiques de lecture</li>
-                                <li>C'est tout ! Le temps de lecture et la barre s'affichent automatiquement.</li>
+                                <li><?php printf( esc_html__( 'Activate your %slicense%s in the License tab', 'reading-progress-pro' ), '<strong>', '</strong>' ); ?></li>
+                                <li><?php printf( esc_html__( 'Configure the %sreading speed%s and display format in General', 'reading-progress-pro' ), '<strong>', '</strong>' ); ?></li>
+                                <li><?php printf( esc_html__( 'Customize the %sprogress bar%s (color, height, position)', 'reading-progress-pro' ), '<strong>', '</strong>' ); ?></li>
+                                <li><?php printf( esc_html__( 'Enable %stracking%s to monitor reading statistics', 'reading-progress-pro' ), '<strong>', '</strong>' ); ?></li>
+                                <li><?php esc_html_e( "That's it! Reading time and the progress bar display automatically.", 'reading-progress-pro' ); ?></li>
                             </ol>
                         </div>
 
                         <div class="rpp-admin-section">
-                            <h2>Temps de lecture</h2>
-                            <p style="color:#374151;">Le temps de lecture est calcul&eacute; automatiquement en fonction du nombre de mots et d'images dans votre article :</p>
+                            <h2><?php esc_html_e( 'Reading Time', 'reading-progress-pro' ); ?></h2>
+                            <p style="color:#374151;"><?php esc_html_e( 'Reading time is calculated automatically based on the number of words and images in your article:', 'reading-progress-pro' ); ?></p>
                             <ul style="list-style:disc;padding-left:20px;color:#374151;line-height:2;">
-                                <li>Les <strong>mots</strong> sont compt&eacute;s et divis&eacute;s par la vitesse configur&eacute;e (d&eacute;faut : 250 mots/min)</li>
-                                <li>Les <strong>images</strong> ajoutent du temps de lecture (12 sec pour la 1&egrave;re, d&eacute;gressif jusqu'&agrave; 3 sec minimum)</li>
-                                <li>Le temps minimum est de <strong>1 minute</strong></li>
-                                <li>Le temps est mis &agrave; jour automatiquement &agrave; chaque sauvegarde de l'article</li>
+                                <li><?php printf( esc_html__( '%sWords%s are counted and divided by the configured speed (default: 250 words/min)', 'reading-progress-pro' ), '<strong>', '</strong>' ); ?></li>
+                                <li><?php printf( esc_html__( '%sImages%s add reading time (12 sec for the first, decreasing down to 3 sec minimum)', 'reading-progress-pro' ), '<strong>', '</strong>' ); ?></li>
+                                <li><?php printf( esc_html__( 'The minimum time is %s1 minute%s', 'reading-progress-pro' ), '<strong>', '</strong>' ); ?></li>
+                                <li><?php esc_html_e( 'The time is updated automatically each time the article is saved', 'reading-progress-pro' ); ?></li>
                             </ul>
-                            <p style="color:#374151;">Le format est personnalisable avec la variable <code>{time}</code>. Exemples :</p>
+                            <p style="color:#374151;"><?php esc_html_e( 'The format is customizable with the {time} variable. Examples:', 'reading-progress-pro' ); ?></p>
                             <table class="widefat striped" style="max-width:500px;">
-                                <thead><tr><th>Format</th><th>R&eacute;sultat</th></tr></thead>
+                                <thead><tr><th><?php esc_html_e( 'Format', 'reading-progress-pro' ); ?></th><th><?php esc_html_e( 'Result', 'reading-progress-pro' ); ?></th></tr></thead>
                                 <tbody>
-                                    <tr><td><code>{time} min de lecture</code></td><td>5 min de lecture</td></tr>
                                     <tr><td><code>{time} min read</code></td><td>5 min read</td></tr>
-                                    <tr><td><code>Lecture : {time} min</code></td><td>Lecture : 5 min</td></tr>
+                                    <tr><td><code>{time} min de lecture</code></td><td>5 min de lecture</td></tr>
+                                    <tr><td><code>Reading time: {time} min</code></td><td>Reading time: 5 min</td></tr>
                                     <tr><td><code>{time} minutes</code></td><td>5 minutes</td></tr>
                                 </tbody>
                             </table>
                         </div>
 
                         <div class="rpp-admin-section">
-                            <h2>Barre de progression</h2>
-                            <p style="color:#374151;">La barre de progression indique visuellement la position du lecteur dans l'article :</p>
+                            <h2><?php esc_html_e( 'Progress Bar', 'reading-progress-pro' ); ?></h2>
+                            <p style="color:#374151;"><?php esc_html_e( 'The progress bar visually indicates the reader\'s position in the article:', 'reading-progress-pro' ); ?></p>
                             <ul style="list-style:disc;padding-left:20px;color:#374151;line-height:2;">
-                                <li>Se base sur le <strong>s&eacute;lecteur CSS</strong> configur&eacute; pour d&eacute;tecter la zone de contenu</li>
-                                <li>S'affiche en <strong>haut</strong> ou en <strong>bas</strong> de la fen&ecirc;tre (position fixe)</li>
-                                <li>Couleur, &eacute;paisseur et fond personnalisables</li>
-                                <li>Utilise du JavaScript vanilla performant (pas de jQuery, scroll passif)</li>
-                                <li>S'affiche uniquement sur les <strong>articles singuliers</strong> (pas les archives)</li>
+                                <li><?php printf( esc_html__( 'Based on the configured %sCSS selector%s to detect the content area', 'reading-progress-pro' ), '<strong>', '</strong>' ); ?></li>
+                                <li><?php printf( esc_html__( 'Displayed at the %stop%s or %sbottom%s of the window (fixed position)', 'reading-progress-pro' ), '<strong>', '</strong>', '<strong>', '</strong>' ); ?></li>
+                                <li><?php esc_html_e( 'Color, height, and background are customizable', 'reading-progress-pro' ); ?></li>
+                                <li><?php esc_html_e( 'Uses performant vanilla JavaScript (no jQuery, passive scroll)', 'reading-progress-pro' ); ?></li>
+                                <li><?php printf( esc_html__( 'Only displayed on %ssingular posts%s (not archives)', 'reading-progress-pro' ), '<strong>', '</strong>' ); ?></li>
                             </ul>
                         </div>
 
                         <div class="rpp-admin-section">
-                            <h2>Tracking &amp; Statistiques <span style="background:#f0f0f1;color:#787c82;font-size:11px;font-weight:600;padding:2px 8px;border-radius:10px;">Premium</span></h2>
-                            <p style="color:#374151;">Le tracking enregistre des donn&eacute;es de lecture anonymis&eacute;es :</p>
+                            <h2><?php esc_html_e( 'Tracking & Statistics', 'reading-progress-pro' ); ?> <span style="background:#f0f0f1;color:#787c82;font-size:11px;font-weight:600;padding:2px 8px;border-radius:10px;">Premium</span></h2>
+                            <p style="color:#374151;"><?php esc_html_e( 'Tracking records anonymized reading data:', 'reading-progress-pro' ); ?></p>
                             <ul style="list-style:disc;padding-left:20px;color:#374151;line-height:2;">
-                                <li><strong>Pourcentage de scroll</strong> — jusqu'o&ugrave; le lecteur a d&eacute;fil&eacute;</li>
-                                <li><strong>Temps pass&eacute;</strong> — dur&eacute;e totale sur la page</li>
-                                <li><strong>Taux de compl&eacute;tion</strong> — pourcentage de lecteurs qui lisent jusqu'&agrave; la fin</li>
-                                <li><strong>Top articles</strong> — les articles les plus lus</li>
+                                <li><?php printf( esc_html__( '%sScroll percentage%s — how far the reader scrolled', 'reading-progress-pro' ), '<strong>', '</strong>' ); ?></li>
+                                <li><?php printf( esc_html__( '%sTime spent%s — total time on the page', 'reading-progress-pro' ), '<strong>', '</strong>' ); ?></li>
+                                <li><?php printf( esc_html__( '%sCompletion rate%s — percentage of readers who read to the end', 'reading-progress-pro' ), '<strong>', '</strong>' ); ?></li>
+                                <li><?php printf( esc_html__( '%sTop articles%s — the most read articles', 'reading-progress-pro' ), '<strong>', '</strong>' ); ?></li>
                             </ul>
-                            <p style="color:#374151;">Les donn&eacute;es sont envoy&eacute;es par AJAX toutes les 30 secondes et au d&eacute;part de la page. Aucune donn&eacute;e personnelle n'est stock&eacute;e.</p>
+                            <p style="color:#374151;"><?php esc_html_e( 'Data is sent via AJAX every 30 seconds and on page exit. No personal data is stored.', 'reading-progress-pro' ); ?></p>
                         </div>
 
                         <div class="rpp-admin-section">
-                            <h2>Social Proof</h2>
-                            <p style="color:#374151;">Quand activ&eacute;, un badge s'affiche sous le temps de lecture pour montrer combien de personnes lisent l'article en ce moment :</p>
+                            <h2><?php esc_html_e( 'Social Proof', 'reading-progress-pro' ); ?></h2>
+                            <p style="color:#374151;"><?php esc_html_e( 'When enabled, a badge is displayed below the reading time to show how many people are currently reading the article:', 'reading-progress-pro' ); ?></p>
                             <div style="background:#fff;border:1px solid #e5e7eb;border-radius:6px;padding:16px;margin:12px 0;display:inline-block;">
-                                <span style="color:#666;">&#128337; 5 min de lecture</span><br>
-                                <span style="color:#16a34a;font-size:12px;">&#9679; 3 personnes lisent cet article</span>
+                                <span style="color:#666;">&#128337; 5 min read</span><br>
+                                <span style="color:#16a34a;font-size:12px;">&#9679; <?php esc_html_e( '3 people are reading this article', 'reading-progress-pro' ); ?></span>
                             </div>
-                            <p style="color:#374151;">Le compteur utilise des transients WordPress (cache 2 minutes) pour compter les sessions actives. Vous pouvez d&eacute;finir un seuil minimum pour &eacute;viter d'afficher "1 personne lit cet article".</p>
+                            <p style="color:#374151;"><?php esc_html_e( 'The counter uses WordPress transients (2-minute cache) to count active sessions. You can set a minimum threshold to avoid displaying "1 person is reading this article".', 'reading-progress-pro' ); ?></p>
                         </div>
 
                         <div class="rpp-admin-section">
-                            <h2>Shortcodes</h2>
+                            <h2><?php esc_html_e( 'Shortcodes', 'reading-progress-pro' ); ?></h2>
                             <table class="widefat striped" style="max-width:700px;">
-                                <thead><tr><th>Shortcode</th><th>R&eacute;sultat</th></tr></thead>
+                                <thead><tr><th><?php esc_html_e( 'Shortcode', 'reading-progress-pro' ); ?></th><th><?php esc_html_e( 'Result', 'reading-progress-pro' ); ?></th></tr></thead>
                                 <tbody>
                                     <tr>
                                         <td><code>[reading_time]</code></td>
-                                        <td>Affiche le temps de lecture de l'article courant</td>
+                                        <td><?php esc_html_e( 'Displays the reading time for the current article', 'reading-progress-pro' ); ?></td>
                                     </tr>
                                     <tr>
                                         <td><code>[reading_time id="123"]</code></td>
-                                        <td>Affiche le temps de lecture d'un article sp&eacute;cifique</td>
+                                        <td><?php esc_html_e( 'Displays the reading time for a specific article', 'reading-progress-pro' ); ?></td>
                                     </tr>
                                     <tr>
                                         <td><code>[reading_time format="{time} minutes"]</code></td>
-                                        <td>Format personnalis&eacute; pour cette instance</td>
+                                        <td><?php esc_html_e( 'Custom format for this instance', 'reading-progress-pro' ); ?></td>
                                     </tr>
                                 </tbody>
                             </table>
                         </div>
 
                         <div class="rpp-admin-section">
-                            <h2>Personnalisation CSS</h2>
-                            <p style="color:#374151;">Classes CSS disponibles pour personnaliser l'affichage :</p>
+                            <h2><?php esc_html_e( 'CSS Customization', 'reading-progress-pro' ); ?></h2>
+                            <p style="color:#374151;"><?php esc_html_e( 'Available CSS classes to customize the display:', 'reading-progress-pro' ); ?></p>
                             <table class="widefat striped" style="max-width:700px;">
-                                <thead><tr><th>Classe</th><th>Description</th></tr></thead>
+                                <thead><tr><th><?php esc_html_e( 'Class', 'reading-progress-pro' ); ?></th><th><?php esc_html_e( 'Description', 'reading-progress-pro' ); ?></th></tr></thead>
                                 <tbody>
-                                    <tr><td><code>.rpp-reading-time</code></td><td>Conteneur du temps de lecture</td></tr>
-                                    <tr><td><code>.rpp-icon</code></td><td>Ic&ocirc;ne horloge</td></tr>
-                                    <tr><td><code>.rpp-time-text</code></td><td>Texte du temps de lecture</td></tr>
-                                    <tr><td><code>.rpp-social-proof</code></td><td>Badge social proof</td></tr>
-                                    <tr><td><code>#rpp-progress-track</code></td><td>Piste de la barre de progression</td></tr>
-                                    <tr><td><code>#rpp-bar</code></td><td>Barre de progression (remplissage)</td></tr>
+                                    <tr><td><code>.rpp-reading-time</code></td><td><?php esc_html_e( 'Reading time container', 'reading-progress-pro' ); ?></td></tr>
+                                    <tr><td><code>.rpp-icon</code></td><td><?php esc_html_e( 'Clock icon', 'reading-progress-pro' ); ?></td></tr>
+                                    <tr><td><code>.rpp-time-text</code></td><td><?php esc_html_e( 'Reading time text', 'reading-progress-pro' ); ?></td></tr>
+                                    <tr><td><code>.rpp-social-proof</code></td><td><?php esc_html_e( 'Social proof badge', 'reading-progress-pro' ); ?></td></tr>
+                                    <tr><td><code>#rpp-progress-track</code></td><td><?php esc_html_e( 'Progress bar track', 'reading-progress-pro' ); ?></td></tr>
+                                    <tr><td><code>#rpp-bar</code></td><td><?php esc_html_e( 'Progress bar (fill)', 'reading-progress-pro' ); ?></td></tr>
                                 </tbody>
                             </table>
-                            <p style="color:#374151;margin-top:12px;">Vous pouvez aussi ajouter du CSS personnalis&eacute; dans l'onglet Statistiques (champ CSS).</p>
+                            <p style="color:#374151;margin-top:12px;"><?php esc_html_e( 'You can also add custom CSS in the Statistics tab (CSS field).', 'reading-progress-pro' ); ?></p>
                         </div>
 
                         <div class="rpp-admin-section">
-                            <h2>Licence</h2>
+                            <h2><?php esc_html_e( 'License', 'reading-progress-pro' ); ?></h2>
                             <ul style="list-style:disc;padding-left:20px;color:#374151;line-height:2;">
-                                <li>Le plugin n&eacute;cessite une <strong>cl&eacute; de licence</strong> au format <code>RPP-XXXX-XXXX-XXXX</code></li>
-                                <li>La licence est valid&eacute;e toutes les 72 heures automatiquement</li>
-                                <li>Selon votre licence, elle peut &ecirc;tre <strong>mono-domaine</strong> ou <strong>multi-domaines</strong></li>
-                                <li>En cas de changement de domaine, d&eacute;sactivez d'abord la licence sur l'ancien domaine</li>
-                                <li>Les mises &agrave; jour du plugin sont automatiques via l'admin WordPress</li>
-                                <li>Le calcul du temps de lecture fonctionne <strong>sans licence</strong> (gratuit). La barre de progression, le tracking et le social proof n&eacute;cessitent une licence active.</li>
+                                <li><?php printf( esc_html__( 'The plugin requires a %slicense key%s in the format %s', 'reading-progress-pro' ), '<strong>', '</strong>', '<code>RPP-XXXX-XXXX-XXXX</code>' ); ?></li>
+                                <li><?php esc_html_e( 'The license is validated automatically every 72 hours', 'reading-progress-pro' ); ?></li>
+                                <li><?php printf( esc_html__( 'Depending on your license, it can be %ssingle-domain%s or %smulti-domain%s', 'reading-progress-pro' ), '<strong>', '</strong>', '<strong>', '</strong>' ); ?></li>
+                                <li><?php esc_html_e( 'When changing domains, deactivate the license on the old domain first', 'reading-progress-pro' ); ?></li>
+                                <li><?php esc_html_e( 'Plugin updates are automatic via the WordPress admin', 'reading-progress-pro' ); ?></li>
+                                <li><?php printf( esc_html__( 'Reading time calculation works %swithout a license%s (free). The progress bar, tracking, and social proof require an active license.', 'reading-progress-pro' ), '<strong>', '</strong>' ); ?></li>
                             </ul>
                         </div>
 
                         <div class="rpp-admin-section" style="background:#fefce8;border-color:#fde68a;">
-                            <h2 style="border-color:#fde68a;">Support</h2>
-                            <p style="color:#374151;">Pour toute question ou probl&egrave;me :</p>
+                            <h2 style="border-color:#fde68a;"><?php esc_html_e( 'Support', 'reading-progress-pro' ); ?></h2>
+                            <p style="color:#374151;"><?php esc_html_e( 'For any questions or issues:', 'reading-progress-pro' ); ?></p>
                             <ul style="list-style:none;padding:0;line-height:2.2;">
                                 <li>Email : <a href="mailto:contact@khalid.digital">contact@khalid.digital</a></li>
                             </ul>
@@ -723,7 +733,7 @@ $masked = substr($license_key, 0, 4) . '-****-****-' . substr($license_key, -4);
                 var key = $('#rpp-license-key').val().trim();
                 if (!key) return;
 
-                btn.prop('disabled', true).text('Activation...');
+                btn.prop('disabled', true).text('<?php echo esc_js( __( 'Activating...', 'reading-progress-pro' ) ); ?>');
 
                 $.post(ajaxurl, {
                     action: 'rpp_activate_license',
@@ -735,18 +745,18 @@ $masked = substr($license_key, 0, 4) . '-****-****-' . substr($license_key, -4);
                         setTimeout(function() { location.reload(); }, 1000);
                     } else {
                         $('#rpp-license-message').html('<div class="notice notice-error inline"><p>' + response.data + '</p></div>').show();
-                        btn.prop('disabled', false).text('Activer la licence');
+                        btn.prop('disabled', false).text('<?php echo esc_js( __( 'Activate license', 'reading-progress-pro' ) ); ?>');
                     }
                 }).fail(function() {
-                    $('#rpp-license-message').html('<div class="notice notice-error inline"><p>Erreur de connexion.</p></div>').show();
-                    btn.prop('disabled', false).text('Activer la licence');
+                    $('#rpp-license-message').html('<div class="notice notice-error inline"><p><?php echo esc_js( __( 'Connection error.', 'reading-progress-pro' ) ); ?></p></div>').show();
+                    btn.prop('disabled', false).text('<?php echo esc_js( __( 'Activate license', 'reading-progress-pro' ) ); ?>');
                 });
             });
 
             $('#rpp-deactivate-btn').on('click', function() {
-                if (!confirm('D\u00e9sactiver la licence sur ce domaine ?')) return;
+                if (!confirm('<?php echo esc_js( __( 'Deactivate the license on this domain?', 'reading-progress-pro' ) ); ?>')) return;
                 var btn = $(this);
-                btn.prop('disabled', true).text('D\u00e9sactivation...');
+                btn.prop('disabled', true).text('<?php echo esc_js( __( 'Deactivating...', 'reading-progress-pro' ) ); ?>');
 
                 $.post(ajaxurl, {
                     action: 'rpp_deactivate_license',
@@ -781,34 +791,34 @@ $masked = substr($license_key, 0, 4) . '-****-****-' . substr($license_key, -4);
         <div class="rpp-stats-grid">
             <div class="rpp-admin-section rpp-stat-card">
                 <strong><?php echo esc_html( round( $completion ) ); ?>%</strong>
-                <p>Taux de compl&eacute;tion (30j)</p>
+                <p><?php esc_html_e( 'Completion rate (30d)', 'reading-progress-pro' ); ?></p>
             </div>
             <div class="rpp-admin-section rpp-stat-card">
                 <strong><?php echo esc_html( round( $avg_time ) ); ?>s</strong>
-                <p>Temps moyen (30j)</p>
+                <p><?php esc_html_e( 'Avg. time (30d)', 'reading-progress-pro' ); ?></p>
             </div>
             <div class="rpp-admin-section rpp-stat-card">
                 <strong><?php echo count( $top ); ?></strong>
-                <p>Articles suivis</p>
+                <p><?php esc_html_e( 'Tracked articles', 'reading-progress-pro' ); ?></p>
             </div>
             <div class="rpp-admin-section rpp-stat-card">
                 <strong><?php echo absint( array_sum( array_map( function( $d ) { return isset( $d->reads ) ? $d->reads : 0; }, $daily ) ) ); ?></strong>
-                <p>Lectures (7j)</p>
+                <p><?php esc_html_e( 'Reads (7d)', 'reading-progress-pro' ); ?></p>
             </div>
         </div>
 
         <!-- Top 10 -->
         <div class="rpp-admin-section">
-            <h2>Top 10 articles — 30 derniers jours</h2>
+            <h2><?php esc_html_e( 'Top 10 articles — last 30 days', 'reading-progress-pro' ); ?></h2>
             <?php if ( ! empty( $top ) ) : ?>
                 <table class="widefat striped">
                     <thead>
                         <tr>
                             <th>#</th>
-                            <th>Article</th>
-                            <th style="text-align:right;">Lectures</th>
-                            <th style="text-align:right;">Compl&eacute;tion</th>
-                            <th style="text-align:right;">Temps moy.</th>
+                            <th><?php esc_html_e( 'Article', 'reading-progress-pro' ); ?></th>
+                            <th style="text-align:right;"><?php esc_html_e( 'Reads', 'reading-progress-pro' ); ?></th>
+                            <th style="text-align:right;"><?php esc_html_e( 'Completion', 'reading-progress-pro' ); ?></th>
+                            <th style="text-align:right;"><?php esc_html_e( 'Avg. time', 'reading-progress-pro' ); ?></th>
                         </tr>
                     </thead>
                     <tbody>
@@ -817,7 +827,7 @@ $masked = substr($license_key, 0, 4) . '-****-****-' . substr($license_key, -4);
                                 <td><?php echo absint( $i + 1 ); ?></td>
                                 <td>
                                     <a href="<?php echo esc_url( admin_url( 'post.php?post=' . absint( $row->post_id ) . '&action=edit' ) ); ?>">
-                                        <?php echo esc_html( get_the_title( $row->post_id ) ?: '(sans titre)' ); ?>
+                                        <?php echo esc_html( get_the_title( $row->post_id ) ?: __( '(no title)', 'reading-progress-pro' ) ); ?>
                                     </a>
                                 </td>
                                 <td style="text-align:right;font-weight:600;"><?php echo absint( $row->reads ); ?></td>
@@ -828,13 +838,13 @@ $masked = substr($license_key, 0, 4) . '-****-****-' . substr($license_key, -4);
                     </tbody>
                 </table>
             <?php else : ?>
-                <p style="color:#6b7280;">Aucune donn&eacute;e disponible. Activez le tracking pour commencer &agrave; collecter des statistiques.</p>
+                <p style="color:#6b7280;"><?php esc_html_e( 'No data available. Enable tracking to start collecting statistics.', 'reading-progress-pro' ); ?></p>
             <?php endif; ?>
         </div>
 
         <!-- Daily chart (7 days) -->
         <div class="rpp-admin-section">
-            <h2>Lectures par jour — 7 derniers jours</h2>
+            <h2><?php esc_html_e( 'Reads per day — last 7 days', 'reading-progress-pro' ); ?></h2>
             <?php if ( ! empty( $daily ) ) : ?>
                 <div class="rpp-chart">
                     <?php foreach ( $daily as $d ) : ?>
@@ -845,7 +855,7 @@ $masked = substr($license_key, 0, 4) . '-****-****-' . substr($license_key, -4);
                     <?php endforeach; ?>
                 </div>
             <?php else : ?>
-                <p style="color:#6b7280;">Aucune donn&eacute;e disponible.</p>
+                <p style="color:#6b7280;"><?php esc_html_e( 'No data available.', 'reading-progress-pro' ); ?></p>
             <?php endif; ?>
         </div>
         <?php
@@ -857,7 +867,7 @@ $masked = substr($license_key, 0, 4) . '-****-****-' . substr($license_key, -4);
 function rpp_settings_defaults() {
     return [
         'words_per_minute'   => '250',
-        'time_format'        => '{time} min de lecture',
+        'time_format'        => '{time} min read',
         'show_reading_time'  => '1',
         'time_position'      => 'before_content',
         'show_icon'          => '1',

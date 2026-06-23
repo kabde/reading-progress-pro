@@ -1,0 +1,671 @@
+# Copyright (C) 2024 Abderrahim KHALID
+# This file is distributed under the same license as the Reading Time & Progress Pro plugin.
+msgid ""
+msgstr ""
+"Project-Id-Version: Reading Time & Progress Pro 1.0.0\n"
+"Report-Msgid-Bugs-To: contact@khalid.digital\n"
+"POT-Creation-Date: 2026-06-21 00:00+0000\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+
+#. Plugin Name
+msgid "Reading Time & Progress Pro"
+msgstr ""
+
+#: inc/license.php
+msgid "Too many attempts. Please try again in one minute."
+msgstr ""
+
+#: inc/license.php
+msgid "Invalid license format."
+msgstr ""
+
+#: inc/license.php
+#, php-format
+msgid "Connection error: %s"
+msgstr ""
+
+#: inc/license.php
+msgid "License activated."
+msgstr ""
+
+#: inc/license.php
+msgid "Activation failed."
+msgstr ""
+
+#: inc/license.php
+#, php-format
+msgid "Please %sactivate your license%s to use the plugin."
+msgstr ""
+
+#: inc/license.php
+#, php-format
+msgid "Your license has expired. %sRenew%s"
+msgstr ""
+
+#: inc/license.php
+#, php-format
+msgid "Your license expires in %1$d day. %2$sView%3$s"
+msgid_plural "Your license expires in %1$d days. %2$sView%3$s"
+msgstr[0] ""
+msgstr[1] ""
+
+#: inc/license.php
+msgid "Permission denied."
+msgstr ""
+
+#: inc/license.php
+msgid "License deactivated."
+msgstr ""
+
+#: admin/class-rpp-settings.php
+msgid "License"
+msgstr ""
+
+#: admin/class-rpp-settings.php
+msgid "General"
+msgstr ""
+
+#: admin/class-rpp-settings.php
+msgid "Progress Bar"
+msgstr ""
+
+#: admin/class-rpp-settings.php
+msgid "Statistics"
+msgstr ""
+
+#: admin/class-rpp-settings.php
+msgid "Documentation"
+msgstr ""
+
+#: admin/class-rpp-settings.php
+msgid "You do not have sufficient permissions."
+msgstr ""
+
+#: admin/class-rpp-settings.php
+msgid "License Active"
+msgstr ""
+
+#: admin/class-rpp-settings.php
+msgid "License key"
+msgstr ""
+
+#: admin/class-rpp-settings.php
+msgid "Domain"
+msgstr ""
+
+#: admin/class-rpp-settings.php
+msgid "Expiration"
+msgstr ""
+
+#: admin/class-rpp-settings.php
+#, php-format
+msgid "Expired on %s"
+msgstr ""
+
+#: admin/class-rpp-settings.php
+#, php-format
+msgid "%1$s (%2$d day remaining)"
+msgid_plural "%1$s (%2$d days remaining)"
+msgstr[0] ""
+msgstr[1] ""
+
+#: admin/class-rpp-settings.php
+#, php-format
+msgid "%1$s (%2$d days remaining)"
+msgstr ""
+
+#: admin/class-rpp-settings.php
+msgid "Lifetime (no expiration)"
+msgstr ""
+
+#: admin/class-rpp-settings.php
+msgid "Deactivate license"
+msgstr ""
+
+#: admin/class-rpp-settings.php
+msgid "Activate your license"
+msgstr ""
+
+#: admin/class-rpp-settings.php
+msgid "Enter your license key to activate Reading Time & Progress Pro."
+msgstr ""
+
+#: admin/class-rpp-settings.php
+msgid "Activate license"
+msgstr ""
+
+#: admin/class-rpp-settings.php
+msgid "Reading Time"
+msgstr ""
+
+#: admin/class-rpp-settings.php
+msgid "Words per minute"
+msgstr ""
+
+#: admin/class-rpp-settings.php
+msgid "Average reading speed. 250 is the standard for most languages."
+msgstr ""
+
+#: admin/class-rpp-settings.php
+msgid "Display format"
+msgstr ""
+
+#: admin/class-rpp-settings.php
+#, php-format
+msgid "Use %s for the number of minutes. E.g.: %s, %s"
+msgstr ""
+
+#: admin/class-rpp-settings.php
+msgid "Show reading time"
+msgstr ""
+
+#: admin/class-rpp-settings.php
+msgid "Automatically display reading time on posts"
+msgstr ""
+
+#: admin/class-rpp-settings.php
+msgid "Position"
+msgstr ""
+
+#: admin/class-rpp-settings.php
+msgid "Before content"
+msgstr ""
+
+#: admin/class-rpp-settings.php
+msgid "After title"
+msgstr ""
+
+#: admin/class-rpp-settings.php
+msgid "After content"
+msgstr ""
+
+#: admin/class-rpp-settings.php
+msgid "Icon"
+msgstr ""
+
+#: admin/class-rpp-settings.php
+msgid "Show clock icon &#128337; before reading time"
+msgstr ""
+
+#: admin/class-rpp-settings.php
+msgid "Post listings"
+msgstr ""
+
+#: admin/class-rpp-settings.php
+msgid "Also display in archives, categories, and search results"
+msgstr ""
+
+#: admin/class-rpp-settings.php
+msgid "Content types"
+msgstr ""
+
+#: admin/class-rpp-settings.php
+msgid "Content CSS selector"
+msgstr ""
+
+#: admin/class-rpp-settings.php
+msgid "CSS selector used to detect the content area (for the progress bar). E.g.:"
+msgstr ""
+
+#: admin/class-rpp-settings.php
+msgid "Save"
+msgstr ""
+
+#: admin/class-rpp-settings.php
+msgid "Enable bar"
+msgstr ""
+
+#: admin/class-rpp-settings.php
+msgid "Show a reading progress bar"
+msgstr ""
+
+#: admin/class-rpp-settings.php
+msgid "Color"
+msgstr ""
+
+#: admin/class-rpp-settings.php
+msgid "Height"
+msgstr ""
+
+#: admin/class-rpp-settings.php
+msgid "Top of page"
+msgstr ""
+
+#: admin/class-rpp-settings.php
+msgid "Bottom of page"
+msgstr ""
+
+#: admin/class-rpp-settings.php
+msgid "Track background"
+msgstr ""
+
+#: admin/class-rpp-settings.php
+msgid "Show a semi-transparent background behind the bar"
+msgstr ""
+
+#: admin/class-rpp-settings.php
+msgid "Preview"
+msgstr ""
+
+#: admin/class-rpp-settings.php
+msgid "Article title"
+msgstr ""
+
+#: admin/class-rpp-settings.php
+msgid "Tracking Settings"
+msgstr ""
+
+#: admin/class-rpp-settings.php
+msgid "Enable tracking"
+msgstr ""
+
+#: admin/class-rpp-settings.php
+msgid "Record reading data (scroll, time spent)"
+msgstr ""
+
+#: admin/class-rpp-settings.php
+msgid "Exclude admins"
+msgstr ""
+
+#: admin/class-rpp-settings.php
+msgid "Do not track administrators"
+msgstr ""
+
+#: admin/class-rpp-settings.php
+msgid "Data retention"
+msgstr ""
+
+#: admin/class-rpp-settings.php
+#, php-format
+msgid "%d days"
+msgstr ""
+
+#: admin/class-rpp-settings.php
+msgid "1 year"
+msgstr ""
+
+#: admin/class-rpp-settings.php
+msgid "How long tracking data is kept. Older data is automatically deleted."
+msgstr ""
+
+#: admin/class-rpp-settings.php
+msgid "Social proof"
+msgstr ""
+
+#: admin/class-rpp-settings.php
+msgid "Show the number of current readers"
+msgstr ""
+
+#: admin/class-rpp-settings.php
+msgid "Minimum threshold"
+msgstr ""
+
+#: admin/class-rpp-settings.php
+msgid "Minimum number of active readers to display the social proof."
+msgstr ""
+
+#: admin/class-rpp-settings.php
+msgid "Custom CSS"
+msgstr ""
+
+#: admin/class-rpp-settings.php
+msgid "Custom CSS applied on the front-end."
+msgstr ""
+
+#: admin/class-rpp-settings.php
+msgid "Completion rate (30d)"
+msgstr ""
+
+#: admin/class-rpp-settings.php
+msgid "Avg. time (30d)"
+msgstr ""
+
+#: admin/class-rpp-settings.php
+msgid "Tracked articles"
+msgstr ""
+
+#: admin/class-rpp-settings.php
+msgid "Reads (7d)"
+msgstr ""
+
+#: admin/class-rpp-settings.php
+msgid "Top 10 articles — last 30 days"
+msgstr ""
+
+#: admin/class-rpp-settings.php
+msgid "Article"
+msgstr ""
+
+#: admin/class-rpp-settings.php
+msgid "Reads"
+msgstr ""
+
+#: admin/class-rpp-settings.php
+msgid "Completion"
+msgstr ""
+
+#: admin/class-rpp-settings.php
+msgid "Avg. time"
+msgstr ""
+
+#: admin/class-rpp-settings.php
+msgid "(no title)"
+msgstr ""
+
+#: admin/class-rpp-settings.php
+msgid "No data available. Enable tracking to start collecting statistics."
+msgstr ""
+
+#: admin/class-rpp-settings.php
+msgid "Reads per day — last 7 days"
+msgstr ""
+
+#: admin/class-rpp-settings.php
+msgid "No data available."
+msgstr ""
+
+#: admin/class-rpp-settings.php
+msgid "Getting Started"
+msgstr ""
+
+#: admin/class-rpp-settings.php
+#, php-format
+msgid "Activate your %slicense%s in the License tab"
+msgstr ""
+
+#: admin/class-rpp-settings.php
+#, php-format
+msgid "Configure the %sreading speed%s and display format in General"
+msgstr ""
+
+#: admin/class-rpp-settings.php
+#, php-format
+msgid "Customize the %sprogress bar%s (color, height, position)"
+msgstr ""
+
+#: admin/class-rpp-settings.php
+#, php-format
+msgid "Enable %stracking%s to monitor reading statistics"
+msgstr ""
+
+#: admin/class-rpp-settings.php
+msgid "That's it! Reading time and the progress bar display automatically."
+msgstr ""
+
+#: admin/class-rpp-settings.php
+msgid "Reading time is calculated automatically based on the number of words and images in your article:"
+msgstr ""
+
+#: admin/class-rpp-settings.php
+#, php-format
+msgid "%sWords%s are counted and divided by the configured speed (default: 250 words/min)"
+msgstr ""
+
+#: admin/class-rpp-settings.php
+#, php-format
+msgid "%sImages%s add reading time (12 sec for the first, decreasing down to 3 sec minimum)"
+msgstr ""
+
+#: admin/class-rpp-settings.php
+#, php-format
+msgid "The minimum time is %s1 minute%s"
+msgstr ""
+
+#: admin/class-rpp-settings.php
+msgid "The time is updated automatically each time the article is saved"
+msgstr ""
+
+#: admin/class-rpp-settings.php
+msgid "The format is customizable with the {time} variable. Examples:"
+msgstr ""
+
+#: admin/class-rpp-settings.php
+msgid "Format"
+msgstr ""
+
+#: admin/class-rpp-settings.php
+msgid "Result"
+msgstr ""
+
+#: admin/class-rpp-settings.php
+msgid "The progress bar visually indicates the reader's position in the article:"
+msgstr ""
+
+#: admin/class-rpp-settings.php
+#, php-format
+msgid "Based on the configured %sCSS selector%s to detect the content area"
+msgstr ""
+
+#: admin/class-rpp-settings.php
+#, php-format
+msgid "Displayed at the %stop%s or %sbottom%s of the window (fixed position)"
+msgstr ""
+
+#: admin/class-rpp-settings.php
+msgid "Color, height, and background are customizable"
+msgstr ""
+
+#: admin/class-rpp-settings.php
+msgid "Uses performant vanilla JavaScript (no jQuery, passive scroll)"
+msgstr ""
+
+#: admin/class-rpp-settings.php
+#, php-format
+msgid "Only displayed on %ssingular posts%s (not archives)"
+msgstr ""
+
+#: admin/class-rpp-settings.php
+msgid "Tracking & Statistics"
+msgstr ""
+
+#: admin/class-rpp-settings.php
+msgid "Tracking records anonymized reading data:"
+msgstr ""
+
+#: admin/class-rpp-settings.php
+#, php-format
+msgid "%sScroll percentage%s — how far the reader scrolled"
+msgstr ""
+
+#: admin/class-rpp-settings.php
+#, php-format
+msgid "%sTime spent%s — total time on the page"
+msgstr ""
+
+#: admin/class-rpp-settings.php
+#, php-format
+msgid "%sCompletion rate%s — percentage of readers who read to the end"
+msgstr ""
+
+#: admin/class-rpp-settings.php
+#, php-format
+msgid "%sTop articles%s — the most read articles"
+msgstr ""
+
+#: admin/class-rpp-settings.php
+msgid "Data is sent via AJAX every 30 seconds and on page exit. No personal data is stored."
+msgstr ""
+
+#: admin/class-rpp-settings.php
+msgid "Social Proof"
+msgstr ""
+
+#: admin/class-rpp-settings.php
+msgid "When enabled, a badge is displayed below the reading time to show how many people are currently reading the article:"
+msgstr ""
+
+#: admin/class-rpp-settings.php
+msgid "3 people are reading this article"
+msgstr ""
+
+#: admin/class-rpp-settings.php
+msgid "The counter uses WordPress transients (2-minute cache) to count active sessions. You can set a minimum threshold to avoid displaying \"1 person is reading this article\"."
+msgstr ""
+
+#: admin/class-rpp-settings.php
+msgid "Shortcodes"
+msgstr ""
+
+#: admin/class-rpp-settings.php
+msgid "Shortcode"
+msgstr ""
+
+#: admin/class-rpp-settings.php
+msgid "Displays the reading time for the current article"
+msgstr ""
+
+#: admin/class-rpp-settings.php
+msgid "Displays the reading time for a specific article"
+msgstr ""
+
+#: admin/class-rpp-settings.php
+msgid "Custom format for this instance"
+msgstr ""
+
+#: admin/class-rpp-settings.php
+msgid "CSS Customization"
+msgstr ""
+
+#: admin/class-rpp-settings.php
+msgid "Available CSS classes to customize the display:"
+msgstr ""
+
+#: admin/class-rpp-settings.php
+msgid "Class"
+msgstr ""
+
+#: admin/class-rpp-settings.php
+msgid "Description"
+msgstr ""
+
+#: admin/class-rpp-settings.php
+msgid "Reading time container"
+msgstr ""
+
+#: admin/class-rpp-settings.php
+msgid "Clock icon"
+msgstr ""
+
+#: admin/class-rpp-settings.php
+msgid "Reading time text"
+msgstr ""
+
+#: admin/class-rpp-settings.php
+msgid "Social proof badge"
+msgstr ""
+
+#: admin/class-rpp-settings.php
+msgid "Progress bar track"
+msgstr ""
+
+#: admin/class-rpp-settings.php
+msgid "Progress bar (fill)"
+msgstr ""
+
+#: admin/class-rpp-settings.php
+msgid "You can also add custom CSS in the Statistics tab (CSS field)."
+msgstr ""
+
+#: admin/class-rpp-settings.php
+#, php-format
+msgid "The plugin requires a %slicense key%s in the format %s"
+msgstr ""
+
+#: admin/class-rpp-settings.php
+msgid "The license is validated automatically every 72 hours"
+msgstr ""
+
+#: admin/class-rpp-settings.php
+#, php-format
+msgid "Depending on your license, it can be %ssingle-domain%s or %smulti-domain%s"
+msgstr ""
+
+#: admin/class-rpp-settings.php
+msgid "When changing domains, deactivate the license on the old domain first"
+msgstr ""
+
+#: admin/class-rpp-settings.php
+msgid "Plugin updates are automatic via the WordPress admin"
+msgstr ""
+
+#: admin/class-rpp-settings.php
+#, php-format
+msgid "Reading time calculation works %swithout a license%s (free). The progress bar, tracking, and social proof require an active license."
+msgstr ""
+
+#: admin/class-rpp-settings.php
+msgid "Support"
+msgstr ""
+
+#: admin/class-rpp-settings.php
+msgid "For any questions or issues:"
+msgstr ""
+
+#: admin/class-rpp-settings.php
+msgid "Activating..."
+msgstr ""
+
+#: admin/class-rpp-settings.php
+msgid "Connection error."
+msgstr ""
+
+#: admin/class-rpp-settings.php
+msgid "Deactivate the license on this domain?"
+msgstr ""
+
+#: admin/class-rpp-settings.php
+msgid "Deactivating..."
+msgstr ""
+
+#. Worker premium code strings
+#: worker (RPP_PREMIUM_FILES)
+#, php-format
+msgid "%d person is reading this article"
+msgstr ""
+
+#: worker (RPP_PREMIUM_FILES)
+#, php-format
+msgid "%d people are reading this article"
+msgstr ""
+
+#: worker (RPP_PREMIUM_FILES)
+msgid "Reading Statistics"
+msgstr ""
+
+#: worker (RPP_PREMIUM_FILES)
+msgid "Completed reads"
+msgstr ""
+
+#: worker (RPP_PREMIUM_FILES)
+msgid "Completion rate"
+msgstr ""
+
+#: worker (RPP_PREMIUM_FILES)
+msgid "Avg. scroll"
+msgstr ""
+
+#: worker (RPP_PREMIUM_FILES)
+msgid "Reads per day"
+msgstr ""
+
+#: worker (RPP_PREMIUM_FILES)
+msgid "No data for this period."
+msgstr ""
+
+#: worker (RPP_PREMIUM_FILES)
+#, php-format
+msgid "Top articles (last %d days)"
+msgstr ""
+
+#: worker (RPP_PREMIUM_FILES)
+msgid "Completed"
+msgstr ""
+
+#: worker (RPP_PREMIUM_FILES)
+msgid "Rate"
+msgstr ""

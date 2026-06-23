@@ -31,13 +31,13 @@ function rpp_is_licensed() {
 function rpp_activate_license( $key ) {
     $attempts = (int) get_transient( 'rpp_license_attempts' );
     if ( $attempts >= 5 ) {
-        return [ 'success' => false, 'message' => 'Trop de tentatives. Réessayez dans une minute.' ];
+        return [ 'success' => false, 'message' => __( 'Too many attempts. Please try again in one minute.', 'reading-progress-pro' ) ];
     }
     set_transient( 'rpp_license_attempts', $attempts + 1, MINUTE_IN_SECONDS );
 
     $key = strtoupper( sanitize_text_field( trim( $key ) ) );
-    if ( ! preg_match( '/^RPP-[A-Z0-9]{4}-[A-Z0-9]{4}-[A-Z0-9]{4}$/', $key ) ) {
-        return [ 'success' => false, 'message' => 'Format de licence invalide.' ];
+    if ( ! preg_match( '/^RPP-[A-HJ-NP-Z2-9]{4}-[A-HJ-NP-Z2-9]{4}-[A-HJ-NP-Z2-9]{4}$/', $key ) ) {
+        return [ 'success' => false, 'message' => __( 'Invalid license format.', 'reading-progress-pro' ) ];
     }
 
     $response = wp_remote_post( RPP_API_URL . '/activate', [
@@ -52,7 +52,8 @@ function rpp_activate_license( $key ) {
 
     if ( is_wp_error( $response ) ) {
         error_log( '[RPP] License activation error: ' . $response->get_error_message() );
-        return [ 'success' => false, 'message' => 'Erreur de connexion: ' . $response->get_error_message() ];
+        /* translators: %s: error message */
+        return [ 'success' => false, 'message' => sprintf( __( 'Connection error: %s', 'reading-progress-pro' ), $response->get_error_message() ) ];
     }
 
     $body = json_decode( wp_remote_retrieve_body( $response ), true );
@@ -65,10 +66,10 @@ function rpp_activate_license( $key ) {
             update_option( 'rpp_license_expires_at', sanitize_text_field( $body['expires_at'] ) );
         }
         set_transient( 'rpp_license_valid', 1, 72 * HOUR_IN_SECONDS );
-        return [ 'success' => true, 'message' => $body['message'] ?? 'Licence activée.' ];
+        return [ 'success' => true, 'message' => $body['message'] ?? __( 'License activated.', 'reading-progress-pro' ) ];
     }
 
-    return [ 'success' => false, 'message' => $body['message'] ?? 'Activation échouée.' ];
+    return [ 'success' => false, 'message' => $body['message'] ?? __( 'Activation failed.', 'reading-progress-pro' ) ];
 }
 
 /**
@@ -190,7 +191,8 @@ function rpp_admin_notice_no_license() {
 
     echo '<div class="notice notice-warning"><p>';
     echo '<strong>Reading Time &amp; Progress Pro</strong> — ';
-    echo 'Veuillez <a href="' . esc_url( admin_url( 'admin.php?page=rpp-settings' ) ) . '">activer votre licence</a> pour utiliser le plugin.';
+    /* translators: %s: link to settings page */
+    printf( esc_html__( 'Please %sactivate your license%s to use the plugin.', 'reading-progress-pro' ), '<a href="' . esc_url( admin_url( 'admin.php?page=rpp-settings' ) ) . '">', '</a>' );
     echo '</p></div>';
 }
 add_action( 'admin_notices', 'rpp_admin_notice_no_license' );
@@ -205,9 +207,15 @@ function rpp_admin_notice_expiring() {
     if ( $screen && $screen->id === 'toplevel_page_rpp-settings' ) return;
 
     if ( $days <= 0 ) {
-        echo '<div class="notice notice-error"><p><strong>Reading Time &amp; Progress Pro</strong> — Votre licence a expir&eacute;. <a href="' . esc_url( admin_url( 'admin.php?page=rpp-settings' ) ) . '">Renouveler</a></p></div>';
+        echo '<div class="notice notice-error"><p><strong>Reading Time &amp; Progress Pro</strong> — ';
+        /* translators: %s: link to settings page */
+        printf( esc_html__( 'Your license has expired. %sRenew%s', 'reading-progress-pro' ), '<a href="' . esc_url( admin_url( 'admin.php?page=rpp-settings' ) ) . '">', '</a>' );
+        echo '</p></div>';
     } else {
-        echo '<div class="notice notice-warning"><p><strong>Reading Time &amp; Progress Pro</strong> — Votre licence expire dans ' . $days . ' jour' . ($days > 1 ? 's' : '') . '. <a href="' . esc_url( admin_url( 'admin.php?page=rpp-settings' ) ) . '">Voir</a></p></div>';
+        echo '<div class="notice notice-warning"><p><strong>Reading Time &amp; Progress Pro</strong> — ';
+        /* translators: 1: number of days, 2: opening link tag, 3: closing link tag */
+        printf( esc_html( _n( 'Your license expires in %1$d day. %2$sView%3$s', 'Your license expires in %1$d days. %2$sView%3$s', $days, 'reading-progress-pro' ) ), $days, '<a href="' . esc_url( admin_url( 'admin.php?page=rpp-settings' ) ) . '">', '</a>' );
+        echo '</p></div>';
     }
 }
 add_action( 'admin_notices', 'rpp_admin_notice_expiring' );
@@ -217,7 +225,7 @@ add_action( 'admin_notices', 'rpp_admin_notice_expiring' );
  */
 function rpp_ajax_activate_license() {
     check_ajax_referer( 'rpp_license_nonce', 'nonce' );
-    if ( ! current_user_can( 'manage_options' ) ) wp_send_json_error( 'Permission refusée.' );
+    if ( ! current_user_can( defined('RPP_CAPABILITY') ? RPP_CAPABILITY : 'manage_options' ) ) wp_send_json_error( __( 'Permission denied.', 'reading-progress-pro' ) );
 
     $key = isset( $_POST['license_key'] ) ? sanitize_text_field( wp_unslash( $_POST['license_key'] ) ) : '';
     $result = rpp_activate_license( $key );
@@ -232,10 +240,10 @@ add_action( 'wp_ajax_rpp_activate_license', 'rpp_ajax_activate_license' );
 
 function rpp_ajax_deactivate_license() {
     check_ajax_referer( 'rpp_license_nonce', 'nonce' );
-    if ( ! current_user_can( 'manage_options' ) ) wp_send_json_error( 'Permission refusée.' );
+    if ( ! current_user_can( defined('RPP_CAPABILITY') ? RPP_CAPABILITY : 'manage_options' ) ) wp_send_json_error( __( 'Permission denied.', 'reading-progress-pro' ) );
 
     rpp_deactivate_license();
-    wp_send_json_success( 'Licence désactivée.' );
+    wp_send_json_success( __( 'License deactivated.', 'reading-progress-pro' ) );
 }
 add_action( 'wp_ajax_rpp_deactivate_license', 'rpp_ajax_deactivate_license' );
 

@@ -23,6 +23,12 @@ define( 'RPP_URL',  plugin_dir_url( __FILE__ ) );
 define( 'RPP_CAPABILITY', 'manage_rpp' );
 define( 'RPP_API_URL', 'https://dp-starter.khalid.digital' );
 
+// i18n
+function rpp_load_textdomain() {
+    load_plugin_textdomain( 'reading-progress-pro', false, dirname( RPP_BASENAME ) . '/languages' );
+}
+add_action( 'init', 'rpp_load_textdomain' );
+
 // License system FIRST
 require_once RPP_PATH . 'inc/license.php';
 
